@@ -14,6 +14,14 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT);
 app.use(cors());
 
+// app.get('/location', function(req, res){
+    
+//     const getLocation = require('./data/location.json');
+//     const instanceLocation = new Location(getLocation);
+    
+    
+// });
+
 
 
 
@@ -28,5 +36,5 @@ app.use(cors());
 ///// ERROR HANDLING
 
 app.use( '*', (request, response) => {
-    response.status(404).send('SOORY CAN YOU PLEASE RELOAD THE PAGE?')
+    response.status(404).send('SORRY CAN YOU PLEASE RELOAD THE PAGE?')
 });
