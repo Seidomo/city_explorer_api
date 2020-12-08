@@ -14,13 +14,20 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 
-app.get('./location', function(req, res){
-    const getLocation = require('./data/location.json');
-    const instanceLocation = new Location (getLocation);
-    res.send(instanceLocation);
+app.get('/location', function(req, res){
+    try{
+        const getLocation = require('./data/location.json');
+        const instanceCity = req.query.city;
+        const instanceLocation = new Location (getLocation, instanceCity);
+        console.log(instanceLocation, 'new location');
+        res.status(200).json(instanceLocation);
+    }
+    catch(error){
+        console.log(error, 'its not working');
+    }
 });
  
-app.get('./weather', function(req, res){
+app.get('/weather', function(req, res){
     const getWeatherArray = [];
     const getWeather = require('./data/weather.json');
      getWeather.data.forEach(instanceWeather => {
@@ -29,10 +36,12 @@ app.get('./weather', function(req, res){
       res.send(getWeatherArray);
 })
 
-function Location (location, search_query='seattle'){
-    this.searchQuery = search_query.query.city;
-    this.lattitude = location.lat;
-    this.longitude = location.lon;
+function Location (location, city){
+    this.search_query = city;
+    this.formatted_query = location[0].display_name;
+    this.latitude = location[0].lat;
+    this.longitude = location[0].lon;
+    console.log(location, 'latest location')
 }
 
 function Weather (weather){
@@ -51,9 +60,11 @@ function Weather (weather){
 
 
 
-app.listen(PORT);
+
 ///// ERROR HANDLING
 
 app.use( '*', (request, response) => {
     response.status(404).send('SORRY CAN YOU PLEASE RELOAD THE PAGE?')
 });
+
+app.listen(PORT, ()=> console.log(`app is listening ${PORT}`));
