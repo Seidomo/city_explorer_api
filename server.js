@@ -30,7 +30,7 @@ app.get('/location', function(req, res){
          const locationData = incominLocation.body;
          const instanceLocation = new Location(locationData, req.query.city);
          client.query(`INSERT INTO cities (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`,
-         [req.query.city, instanceLocation.display_name, instanceLocation.latitude, instanceLocation.longitude]).then(() =>{
+         [req.query.city, instanceLocation.formatted_query, instanceLocation.latitude, instanceLocation.longitude]).then(() =>{
             res.send(instanceLocation);
          } );
          
@@ -67,7 +67,7 @@ app.get('/trails', function(req,res){
         const trailData = incomingTrail.body;
        
       const  getTrailData = trailData.trails.map(instanceTrail => new Trail(instanceTrail));
-      console.log(getTrailData);
+      
         res.send(getTrailData);
         
     }).catch(error => console.log(error));
