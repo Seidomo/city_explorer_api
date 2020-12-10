@@ -30,7 +30,7 @@ app.get('/location', function(req, res){
          const locationData = incominLocation.body;
          const instanceLocation = new Location(locationData, req.query.city);
          client.query(`INSERT INTO cities (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`,
-         [req.query.city, instanceLocation.display_name, instanceLocation.latitude, instanceLocation.longitude]).then(() =>{
+         [req.query.city, instanceLocation.formatted_query, instanceLocation.latitude, instanceLocation.longitude]).then(() =>{
             res.send(instanceLocation);
          } );
          
@@ -67,7 +67,7 @@ app.get('/trails', function(req,res){
         const trailData = incomingTrail.body;
        
       const  getTrailData = trailData.trails.map(instanceTrail => new Trail(instanceTrail));
-      console.log(getTrailData);
+      
         res.send(getTrailData);
         
     }).catch(error => console.log(error));
@@ -101,7 +101,7 @@ function Trail (trail){
     this.trail_url = trail.url;
     this.conditions = trail.conditionStatus;
     this.condition_date = trail.conditionDate;
-    this.condition_time = trail.conditionDate.splice(11);
+    this.condition_time = trail.conditionDate;
 }
 
 
@@ -127,18 +127,6 @@ client.connect().then(() => {
 
 
 
-
-// app.get('/location', function(req, res){
-//     const LOCATION_API_KEY = process.env.LOCATION_API_KEY;
-//     const url =`https://us1.locationiq.com/v1/search.php?key=${LOCATION_API_KEY}&q=${req.query.city}&format=json`;
-    
-//     superagent.get(url).then(incominLocation =>{
-//         const locationData = incominLocation.body;
-//         const instanceLocation = new Location(locationData, req.query.city);
-//         res.send(instanceLocation);
-        
-//     }).catch(error => console.log(error));
-// });
 
 
 
