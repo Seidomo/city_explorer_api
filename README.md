@@ -4,14 +4,12 @@
 
 **Author**: Seid Mohamed
 
-**Version**: 2.0.3 
+**Version**: 3.0.0 
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
-
-
-
-
+This is my application that works on real time data and if you want the weather
+or place for hiking just put your location and this app will give all the imformation
+you need
 
 ## Getting Started
 
@@ -22,3 +20,6 @@ Javascript, node.js,
 12/7/2020 10:30 pm application deployed to heroku
 
 ## Credits and Collaborations
+
+ most of my classmates and of course the TA's which i put in capital letter
+ and have great respect they really good at helping students in need.
