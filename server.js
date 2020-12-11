@@ -4,25 +4,30 @@ const express = require('express');
 const superagent = require('superagent');
 const cors = require('cors');
 const pg = require('pg');
+const { response } = require('express');
 require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DATABASE_URL = process.env.DATABASE_URL;
 const client = new pg.Client(DATABASE_URL);
+const axios = require('axios');
+const YELP_API_KEY = process.env.YELP_API_KEY;
 client.on('error', error => console.error(error));
 
 app.use(cors());
+app.use(axios());
 
 
 //////////ROUTES/////
 
 app.get('/location', function(req, res){
-    console.log(req.query.city)
-    client.query('SELECT * FROM cities WHERE search_query=$1;', [req.query.city]).then(data =>{
-        
-        if(data.rows > 0){
-            res.send(rows[0]);  
-    }else{
+    console.log([req.query.city]);
+    client.query('SELECT * FROM cities WHERE search_query=$1;',  [req.query.city]).then(data =>{
+        // console.log(data.rows);
+        if(data.rows.length > 0){
+            res.send(data.rows[0] ); 
+             
+    }else{console.log('from internet'); 
      const LOCATION_API_KEY = process.env.LOCATION_API_KEY;
      const url =`https://us1.locationiq.com/v1/search.php?key=${LOCATION_API_KEY}&q=${req.query.city}&format=json`;
      
@@ -32,6 +37,7 @@ app.get('/location', function(req, res){
          client.query(`INSERT INTO cities (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`,
          [req.query.city, instanceLocation.formatted_query, instanceLocation.latitude, instanceLocation.longitude]).then(() =>{
             res.send(instanceLocation);
+            
          } );
          
           
@@ -71,6 +77,39 @@ app.get('/trails', function(req,res){
         res.send(getTrailData);
         
     }).catch(error => console.log(error));
+    //   response.status(500).send('Sorry! Something went wrong on our end');
+})
+
+app.get('/movies', function(req, res){
+    const MOVIES_API_KEY = process.env.MOVIES_API_KEY;
+    const url=`https://api.themoviedb.org/3/search/movie?api_key=${MOVIES_API_KEY}&query=${req.query.search_query}`;
+
+    superagent.get(url).then(incomingMoviesData =>{
+        // console.log(incomingMoviesData);
+        const moviesData = incomingMoviesData.body;
+        console.log(moviesData);
+        const getMoviesData = moviesData.results.map(instanceMovies => new Movies(instanceMovies));
+        // console.log(getMoviesData);
+        res.send(getMoviesData);
+    }).catch(error => console.log(error));
+    
+})
+
+app.get('/yelp', function(req, res){
+    // const term = req.query.term;
+    const lat = req.query.latitude;
+    const lon = req.query.longitude;
+    
+    const url = `https://api.yelp.com/v3/businesses/search&term=restaurants&key=${YELP_API_KEY}&lattitude=${lat}&longitude=${lon}`
+    superagent.get(url)
+    .then(incomingYelpData =>{
+        const yelpData = incomingYelpData.body;
+        console.log(yelpData);
+        const getYelpData = yelpData.restaurants.map(instanceYelpData => new Yelp(instanceYelpData));
+        res.send(getYelpData);
+    }).catch(error => console.log(error));
+    
+
 })
 
 
@@ -104,9 +143,29 @@ function Trail (trail){
     this.condition_time = trail.conditionDate;
 }
 
+function Movies(movie){
+this.title = movie.original_title;
+this.overview = movie.overview;
+this.average_votes = movie.vote_average;
+this.total_votes = movie.vote_count;
+this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+this.popularity = movie.popularity;
+this.released_on = movie.realeased_path;
+
+
+}
+
+function Yelp(yelps){
+    this.name = yelps.name;
+    this.image_url = yelps.image_url;
+    this.price = yelps.price;
+    this.rating = yelps.rating;
+    this.url = yelps.url;
+}
 
 
 
+  
 
 
 
@@ -115,7 +174,7 @@ function Trail (trail){
 ///// ERROR HANDLING
 
 app.use( '*', (request, response) => {
-    response.status(404).send('SORRY CAN YOU PLEASE RELOAD THE PAGE?')
+    response.status(500).send('Sorry! Something went wrong on our end');
 });
 
 client.connect().then(() => {
