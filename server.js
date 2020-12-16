@@ -1,21 +1,19 @@
 'use strict';
-
+require('dotenv').config();
 const express = require('express');
 const superagent = require('superagent');
 const cors = require('cors');
 const pg = require('pg');
-const { response } = require('express');
-require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL; 
 const client = new pg.Client(DATABASE_URL);
-const axios = require('axios');
+
 const YELP_API_KEY = process.env.YELP_API_KEY;
 client.on('error', error => console.error(error));
 
 app.use(cors());
-app.use(axios());
+
 
 
 //////////ROUTES/////
