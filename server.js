@@ -137,8 +137,10 @@ function Trail (trail){
     this.summary = trail.summary;
     this.trail_url = trail.url;
     this.conditions = trail.conditionStatus;
-    this.condition_date = trail.conditionDate;
-    this.condition_time = trail.conditionDate;
+    this.condition_date = trail.conditionDate.slice(0, 10);
+    this.condition_time = trail.conditionDate.slice(12);
+    console.log(trail.conditionDate.slice(12));
+    console.log(trail.conditionDate.slice(0, 10));
 }
 
 function Movies(movie){
