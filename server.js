@@ -94,16 +94,12 @@ app.get('/movies', function(req, res){
 })
 
 app.get('/yelp', function(req, res){
-    // const term = req.query.term;
-    const lat = req.query.latitude;
-    const lon = req.query.longitude;
-    
-    const url = `https://api.yelp.com/v3/businesses/search&term=restaurants&key=${YELP_API_KEY}&lattitude=${lat}&longitude=${lon}`
+    const url = `https://api.yelp.com/v3/businesses/search?location=${req.query.search_query}&term="restaurant"`;
     superagent.get(url)
     .then(incomingYelpData =>{
-        const yelpData = incomingYelpData.body;
-        console.log(yelpData);
-        const getYelpData = yelpData.restaurants.map(instanceYelpData => new Yelp(instanceYelpData));
+        const yelpData = incomingYelpData.body.businesses;
+        // console.log(yelpData);
+        const getYelpData = yelpData.map(instanceYelpData => new Yelp(instanceYelpData));
         res.send(getYelpData);
     }).catch(error => console.log(error));
     
