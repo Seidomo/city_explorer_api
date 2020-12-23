@@ -75,7 +75,7 @@ app.get('/trails', function(req,res){
         res.send(getTrailData);
         
     }).catch(error => console.log(error));
-    //   response.status(500).send('Sorry! Something went wrong on our end');
+    
 })
 
 app.get('/movies', function(req, res){
@@ -85,7 +85,7 @@ app.get('/movies', function(req, res){
     superagent.get(url).then(incomingMoviesData =>{
         // console.log(incomingMoviesData);
         const moviesData = incomingMoviesData.body;
-        console.log(moviesData);
+        // console.log(moviesData);
         const getMoviesData = moviesData.results.map(instanceMovies => new Movies(instanceMovies));
         // console.log(getMoviesData);
         res.send(getMoviesData);
@@ -95,11 +95,12 @@ app.get('/movies', function(req, res){
 
 app.get('/yelp', function(req, res){
     const url = `https://api.yelp.com/v3/businesses/search?location=${req.query.search_query}&term="restaurant"`;
-    superagent.get(url)
+    superagent.get(url).set('Authorization', `Bearer ${YELP_API_KEY}`)
     .then(incomingYelpData =>{
         const yelpData = incomingYelpData.body.businesses;
         // console.log(yelpData);
         const getYelpData = yelpData.map(instanceYelpData => new Yelp(instanceYelpData));
+        console.log(getYelpData);
         res.send(getYelpData);
     }).catch(error => console.log(error));
     
