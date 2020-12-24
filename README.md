@@ -11,6 +11,25 @@ This is my application that works on real time data and if you want the weather
 or place for hiking just put your location and this app will give all the imformation
 you need
 
+## Time Estimate
+* Number of feature: <u>Feature 1</u>
+  * Estimate of time needed to complete: <u>4 Hours</u>
+  * Start time: <u>3:00</u>
+  * Finish time: <u>9:00</u>
+  * Actual time needed to complete: <u>6 Hours</u>
+
+  * Number of feature: <u>Feature 2</u>
+  * Estimate of time needed to complete: <u>4 Hours</u>
+  * Start time: <u>2:00</u>
+  * Finish time: <u>7:00</u>
+  * Actual time needed to complete: <u>5 Hours</u>
+
+  * Number of feature: <u>Feature 3</u>
+  * Estimate of time needed to complete: <u>4 Hours</u>
+  * Start time: <u>2:00</u>
+  * Finish time: <u>6:00</u>
+  * Actual time needed to complete: <u>4 Hours</u>
+
 ## Getting Started
 
 ## Architecture
