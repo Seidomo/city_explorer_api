@@ -30,6 +30,11 @@ you need
   * Finish time: <u>6:00</u>
   * Actual time needed to complete: <u>4 Hours</u>
 
+  * Number of feature: <u>Feature 4</u>
+  * Estimate of time needed to complete: <u>4 Hours</u>
+  * Start time: <u>2:00</u>
+  * Finish time: <u>8:00</u>
+  * Actual time needed to complete: <u>6 Hours</u>
 ## Getting Started
 
 ## Architecture
